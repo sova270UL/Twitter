@@ -19,10 +19,11 @@ app.json_encoder = CustomJSONEncoder
 def ping():
     return jsonify({'response': 'pong'})
 
-#создание нового твита
 @app.route('/twit', methods=['POST'])
 def create_twit():
-    '''{"body": "Hello World", "author": "@sova270", "id": 1}
+    '''
+    {"body": "Hello World", "author": "@sova270", "id": 1}
+    создает новый твит
     '''
     twit_json = request.get_json()
     twit = Twit(twit_json['body'], twit_json['author'], twit_json['id'])
@@ -30,26 +31,26 @@ def create_twit():
     twits.append(twit)
     return jsonify({'status': 'success'})
 
-#получение всех твитов
 @app.route('/twit', methods=['GET'])
 def read_twit():
+    ''' получение всех твитов '''
     return jsonify({'twits': [twit.__dict__ for twit in twits]})
 
-#получение одного твита по id
 @app.route('/twit/<int:twit_id>', methods=['GET'])
 def read_twit_by_id(twit_id):
+    ''' получение твита по id '''
     return jsonify({'twit': [twit.__dict__ for twit in twits if twit.id == twit_id]})
 
-#удаление твита по id
 @app.route('/twit/<int:twit_id>', methods=['DELETE'])
 def delete_twit_by_id(twit_id):
+    ''' удаление твита по id '''
     twit = [twit for twit in twits if twit.id == twit_id]
     twits.remove(twit[0])
     return jsonify({'status': 'success'})
     
-#изменение твита по id
 @app.route('/twit/<int:twit_id>', methods=['PUT'])
 def update_twit(twit_id):
+    ''' изменение твита по id '''
     twit_json = request.get_json()
     twit = [twit for twit in twits if twit.id == twit_id]
     twit[0].body = twit_json['body']
